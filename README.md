@@ -1,27 +1,148 @@
 # M365 Security Audit Dashboard
 
-> **Enterprise-Grade Security & Compliance Dashboard für Microsoft 365 Tenants**
-> Echtzeit-Sicherheitsanalyse mit KI-gestützten Empfehlungen — gebaut mit Next.js, Azure AD (Entra ID) und Microsoft Graph API.
+> **Ein zentrales Security Dashboard das Microsoft 365 Tenants analysiert, Sicherheitsrisiken aufdeckt und mit KI konkrete Handlungsempfehlungen liefert — inklusive Direktlinks zum Beheben.**
 
-[![Deploy to Azure](https://img.shields.io/badge/Azure-Static%20Web%20Apps-0078D4?logo=microsoft-azure&logoColor=white)](https://kind-ocean-09023de03.4.azurestaticapps.net)
+[![Azure](https://img.shields.io/badge/Azure-Static%20Web%20Apps-0078D4?logo=microsoft-azure&logoColor=white)](#infrastruktur-terraform)
 [![Terraform](https://img.shields.io/badge/IaC-Terraform-7B42BC?logo=terraform&logoColor=white)](#infrastruktur-terraform)
 [![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?logo=github-actions&logoColor=white)](#cicd-pipeline)
 
 ---
 
-## Live Demo
+## Das Problem
 
-**[https://kind-ocean-09023de03.4.azurestaticapps.net](https://kind-ocean-09023de03.4.azurestaticapps.net)**
+IT-Security in Microsoft 365 ist komplex, teuer und zeitaufwendig:
 
-Die App läuft im **Demo-Modus** mit simulierten Daten. Sobald sich ein Benutzer mit einem echten Microsoft 365 Tenant anmeldet, werden **ausschließlich echte Daten** aus der Microsoft Graph API geladen — Demo- und Live-Daten werden niemals vermischt.
+- **Wissen, wo man hinschauen muss** — Entra ID, Intune, Defender, Conditional Access, Identity Protection — alles verteilt über verschiedene Admin-Portale. Ein Security-Audit bedeutet dutzende Klicks durch verschiedene Dashboards.
+- **Security-Experten sind teuer** — Ein erfahrener M365 Security Engineer kostet Unternehmen 80.000-120.000 EUR/Jahr. Viele KMUs können sich das nicht leisten.
+- **Risiko, etwas zu übersehen** — Ohne strukturierte Prüfung bleiben Lücken unentdeckt: Admins ohne MFA, veraltete Apps mit zu vielen Berechtigungen, nicht-konforme Geräte, deaktivierte Policies.
+- **Keine priorisierten Handlungsempfehlungen** — Microsoft zeigt Daten, aber sagt nicht "das musst du JETZT fixen". IT-Teams verlieren Zeit mit unwichtigen Findings.
+
+## Die Lösung
+
+Dieses Dashboard bündelt **alle sicherheitsrelevanten Daten** aus dem Microsoft 365 Tenant in **einer einzigen Oberfläche** und nutzt **KI-gestützte Analyse** um priorisierte Empfehlungen mit Direktlinks zu generieren:
+
+- **Alles auf einen Blick** statt 10+ Admin-Portale durchklicken
+- **KI-Empfehlungen mit Direktlinks** — nicht nur "MFA fehlt", sondern "diese 2 Admins haben kein MFA → Klick hier zum Beheben". Spart Stunden an Recherche
+- **Risiken priorisiert** (Hoch/Mittel/Niedrig) — sofort wissen was zuerst behoben werden muss
+- **Ersetzt mehrere Security-Experten** — automatisierte Analyse die sonst Tage manueller Arbeit braucht
+- **DSGVO-Compliance** eingebaut — Checkliste für alle relevanten Anforderungen
+
+> **Hinweis:** Aus DSGVO-Gründen werden in den Screenshots nur Demo-Daten gezeigt. Nach Anmeldung mit einem echten Microsoft 365 Tenant werden ausschließlich echte Daten aus der Microsoft Graph API geladen. Demo- und Live-Daten werden niemals vermischt.
 
 ---
 
-## Projektübersicht
+## Screenshots
 
-Dieses Dashboard wurde entwickelt, um IT-Administratoren und Security Engineers einen zentralen Überblick über den Sicherheitsstatus ihres Microsoft 365 Tenants zu geben. Es kombiniert **Identity & Access Management**, **Device Compliance**, **Threat Detection** und **KI-gestützte Sicherheitsanalysen** in einer einzigen, modernen Oberfläche.
+### Dashboard Overview — Security Score & Zusammenfassung
 
-### Architektur
+Secure Score mit Breakdown nach Kategorie, kritische KPIs (MFA, Admins, Policies, Risiko-Benutzer) und aktive Sicherheitswarnungen — alles auf einer Seite.
+
+![Dashboard Overview](docs/screenshots/01-dashboard-overview.png)
+
+---
+
+### KI Security Empfehlungen — Priorisiert mit Direktlinks
+
+Das Herzstück der App: Die KI analysiert alle Tenant-Daten und generiert **konkrete Empfehlungen mit Priorität und Direktlinks**. Statt selbst herauszufinden wo das Problem liegt und wie man es behebt, klickt man einfach auf den Link und wird direkt zur richtigen Stelle im Azure Portal geführt. **Das spart Stunden an Recherche und Herumklicken.**
+
+![AI Security Empfehlungen](docs/screenshots/02-ai-recommendations.png)
+
+**Was die KI analysiert:**
+- MFA-Abdeckung — erkennt Benutzer und vor allem Admins ohne MFA
+- Privilegierte Rollen — warnt bei zu vielen Global Admins (Least Privilege)
+- Conditional Access Lücken — findet deaktivierte oder fehlende Policies
+- Risiko-Bewertung — korreliert Identity Protection Signale mit Benutzerrollen
+- Device Compliance — erkennt nicht-konforme oder unverschlüsselte Geräte
+- Secure Score — konkrete Schritte zur Verbesserung
+
+---
+
+### Security Alerts — Echtzeit-Warnungen mit Empfohlenen Maßnahmen
+
+Alle Sicherheitswarnungen aus Microsoft Defender und Entra ID Identity Protection. Jede Warnung enthält empfohlene Maßnahmen die direkt umgesetzt werden können.
+
+![Security Alerts](docs/screenshots/03-alerts.png)
+
+---
+
+### Benutzer & Rollen — Identity & Access Management
+
+Alle Tenant-Benutzer mit MFA-Status, Abteilung und Rollenzuweisungen. Sofort sehen welche Admins kein MFA haben (rot markiert).
+
+![Benutzer & Rollen](docs/screenshots/04-users-roles.png)
+
+---
+
+### Conditional Access Policies
+
+Übersicht aller CA-Policies mit Status (Aktiv, Report-Only, Deaktiviert). Policies im Report-Only Modus werden als Warnung hervorgehoben.
+
+![Conditional Access](docs/screenshots/05-conditional-access.png)
+
+---
+
+### MFA Status — Multi-Faktor-Authentifizierung
+
+MFA-Abdeckung in Prozent, Liste aller Benutzer ohne MFA. Admins ohne MFA werden besonders hervorgehoben da sie das größte Risiko darstellen.
+
+![MFA Status](docs/screenshots/06-mfa-status.png)
+
+---
+
+### Risiko-Benutzer — Entra ID Identity Protection
+
+Benutzer die von Entra ID als gefährdet eingestuft wurden — mit Risikostufe (Hoch/Mittel/Niedrig), Beschreibung und Status.
+
+![Risiko-Benutzer](docs/screenshots/07-risky-users.png)
+
+---
+
+### Intune Geräte — Device Compliance & Verschlüsselung
+
+Alle verwalteten Geräte mit Compliance-Status, Betriebssystem, Verschlüsselungsstatus und letztem Sync. Nicht-konforme Geräte werden rot markiert.
+
+![Intune Geräte](docs/screenshots/08-intune-devices.png)
+
+---
+
+### Audit Logs — Verzeichnis-Protokolle
+
+Alle relevanten Aktionen im Tenant: Anmeldungen, Policy-Änderungen, Benutzer-Erstellung, Berechtigungen. Für Compliance-Nachweise und Forensik.
+
+![Audit Logs](docs/screenshots/09-audit-logs.png)
+
+---
+
+### DSGVO Checkliste — Compliance Tracking
+
+Interaktive Checkliste für alle DSGVO-relevanten Anforderungen: Dokumentation, Verträge, technische Maßnahmen, Betroffenenrechte.
+
+![DSGVO Checkliste](docs/screenshots/10-gdpr-checklist.png)
+
+---
+
+### App-Berechtigungen — OAuth Apps im Tenant
+
+Alle registrierten Apps mit ihren Berechtigungen und Risikobewertung. Veraltete Apps mit zu hohen Berechtigungen werden als Hohes Risiko markiert.
+
+![App-Berechtigungen](docs/screenshots/11-app-permissions.png)
+
+---
+
+## Business Value
+
+| Ohne dieses Dashboard | Mit diesem Dashboard |
+|---|---|
+| 10+ Admin-Portale durchklicken | **1 Dashboard** mit allen Daten |
+| Stunden für ein Security-Audit | **Minuten** — alles automatisch analysiert |
+| Risiko, Lücken zu übersehen | **KI findet Lücken** und priorisiert sie |
+| Manuell recherchieren wo man fixt | **Direktlinks** — 1 Klick zum Beheben |
+| Security-Experte nötig (80-120k/Jahr) | **Automatisierte Analyse** ersetzt manuelle Arbeit |
+| Keine DSGVO-Übersicht | **Integrierte DSGVO-Checkliste** |
+
+---
+
+## Architektur
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -72,167 +193,107 @@ Dieses Dashboard wurde entwickelt, um IT-Administratoren und Security Engineers 
 
 ---
 
-## Features
-
-### Identity & Access Management (Entra ID / Azure AD)
-
-| Feature | Beschreibung | Graph API Endpoint |
-|---|---|---|
-| **Benutzer & Rollen** | Alle Tenant-Benutzer mit Rollenzuweisungen (Global Admin, Security Admin, etc.) | `/users`, `/directoryRoles` |
-| **MFA-Status** | Echtzeit-MFA-Registrierungsstatus pro Benutzer | `/reports/authenticationMethods/userRegistrationDetails` |
-| **Risiko-Benutzer** | Identity Protection — Benutzer mit erkanntem Risiko (Low/Medium/High) | `/identityProtection/riskyUsers` |
-| **Conditional Access** | Alle CA-Policies mit Status (Aktiv/Inaktiv/Report-Only) | `/identity/conditionalAccess/policies` |
-
-### Security & Compliance
-
-| Feature | Beschreibung | Graph API Endpoint |
-|---|---|---|
-| **Secure Score** | Microsoft Secure Score mit Trend-Analyse und Vergleichswerten | `/security/secureScores` |
-| **Security Alerts** | Echtzeit-Sicherheitswarnungen (Severity: High/Medium/Low) | `/security/alerts_v2` |
-| **Intune Geräte** | Device Compliance Status, OS-Versionen, Verschlüsselungsstatus | `/deviceManagement/managedDevices` |
-| **Audit Logs** | Verzeichnis-Audit-Protokolle für Compliance-Nachweise | `/auditLogs/directoryAudits` |
-
-### KI-gestützte Sicherheitsanalyse
-
-Das **AI Security Recommendations Panel** analysiert automatisch alle Tenant-Daten und generiert priorisierte Handlungsempfehlungen:
-
-- **MFA-Abdeckung** — Erkennt Benutzer ohne MFA und priorisiert Admin-Konten
-- **Privilegierte Rollen** — Warnt bei zu vielen Global Admins (Least Privilege Prinzip)
-- **Conditional Access Lücken** — Identifiziert fehlende oder deaktivierte Policies
-- **Risiko-Bewertung** — Korreliert Identity Protection Signale mit Benutzerrollen
-- **Device Compliance** — Erkennt nicht-konforme oder nicht-verschlüsselte Geräte
-- **Secure Score Optimierung** — Konkrete Schritte zur Verbesserung des Scores
-
-Jede Empfehlung enthält: **Priorität** (High/Medium/Low), **Beschreibung**, **Auswirkung** und **konkrete nächste Schritte**.
-
-### Weitere Features
-
-- **DSGVO-Checkliste** — Compliance-Tracking für DSGVO-Anforderungen
-- **App-Berechtigungen** — Übersicht über OAuth App Permissions im Tenant
-- **Report Export** — Dashboard-Daten als Report exportieren
-- **Demo-Modus** — Vollständiger Demo-Modus mit realistischen Beispieldaten (automatisch aktiv ohne Login)
-- **Daten-Trennung** — Strikte Trennung: Demo-Daten nur ohne Login, echte Graph-Daten nur mit Login — niemals gemischt
-
----
-
 ## Technologie-Stack
 
 ### Frontend
 | Technologie | Verwendung |
 |---|---|
-| **Next.js 16** (App Router) | React-Framework mit Static Export für Azure SWA |
+| **Next.js 16** (App Router) | React-Framework mit Static Export |
 | **TypeScript** | Type-Safety über die gesamte Codebase |
-| **Fluent UI v9** | Microsoft Design System für konsistente Enterprise-UX |
-| **Recharts** | Datenvisualisierung (Secure Score Trends, MFA-Charts) |
+| **Fluent UI v9** | Microsoft Design System |
+| **Recharts** | Datenvisualisierung (Score Trends, Charts) |
 
 ### Authentifizierung & API
 | Technologie | Verwendung |
 |---|---|
-| **MSAL.js v5** | OAuth 2.0 / OpenID Connect mit Azure AD (Entra ID) |
-| **Microsoft Graph API** | Zugriff auf alle M365 Security- & Identity-Daten |
-| **Delegated Permissions** | Scoped Access: SecurityEvents, User, Policy, AuditLog, etc. |
+| **MSAL.js v5** | OAuth 2.0 / OpenID Connect mit Entra ID |
+| **Microsoft Graph API** | Zugriff auf alle M365 Security-Daten |
+| **Delegated Permissions** | 8 Scopes für Security, Identity, Devices, Audit |
 
 ### Infrastruktur & DevOps
 | Technologie | Verwendung |
 |---|---|
-| **Azure Static Web Apps** (Free Tier) | Hosting — $0/Monat, global verteilt |
-| **Azure Virtual Network + Subnet** | Netzwerkisolierung für Enterprise-Sicherheit |
-| **Azure Key Vault** | Sichere Verwaltung von Secrets (Deployment Token, API Keys) |
-| **Terraform** | Infrastructure as Code — reproduzierbare Azure-Umgebung |
-| **GitHub Actions** | CI/CD Pipeline — automatisches Build & Deploy bei `git push` |
+| **Azure Static Web Apps** | Hosting (Free Tier, $0/Monat) |
+| **Azure VNet + Subnet** | Netzwerkisolierung |
+| **Azure Key Vault** | Secrets Management |
+| **Terraform** | Infrastructure as Code |
+| **GitHub Actions** | CI/CD — automatisches Deploy bei `git push` |
 
 ---
 
-## Eingesetzte Microsoft Graph API Scopes
+## Microsoft Graph API Scopes
 
 ```
 SecurityEvents.Read.All          — Security Alerts & Secure Score
 User.Read.All                    — Benutzer & Profile
 Policy.Read.All                  — Conditional Access Policies
-IdentityRiskyUser.Read.All       — Identity Protection / Risiko-Benutzer
-DeviceManagementManagedDevices.Read.All — Intune Geräteverwaltung
-AuditLog.Read.All                — Verzeichnis-Audit-Logs
-Directory.Read.All               — Verzeichnisrollen & -objekte
-UserAuthenticationMethod.Read.All — MFA-Registrierungsstatus
+IdentityRiskyUser.Read.All       — Identity Protection
+DeviceManagementManagedDevices.Read.All — Intune Geräte
+AuditLog.Read.All                — Audit Logs
+Directory.Read.All               — Verzeichnisrollen
+UserAuthenticationMethod.Read.All — MFA Status
 ```
 
 ---
 
 ## Infrastruktur (Terraform)
 
-Die gesamte Azure-Infrastruktur ist als **Infrastructure as Code** mit Terraform definiert:
+Die Azure-Infrastruktur ist komplett als Infrastructure as Code definiert:
 
 ```
 infra-sec-app/
 ├── main.tf          # Azure Resources (SWA, VNet, Subnet, Key Vault)
-├── variables.tf     # Konfigurierbare Parameter
-└── outputs.tf       # Outputs (SWA URL, Key Vault URI, etc.)
+├── variables.tf     # Parameter
+└── outputs.tf       # Outputs (URL, Key Vault URI)
 ```
-
-### Ressourcen
 
 | Azure Resource | Zweck | Kosten |
 |---|---|---|
-| `azurerm_static_web_app` | Next.js Hosting (Free Tier) | **$0/Monat** |
-| `azurerm_virtual_network` | Netzwerkisolierung | **$0/Monat** |
-| `azurerm_subnet` | Subnetz für App-Integration | **$0/Monat** |
-| `azurerm_key_vault` | Secrets Management | **$0/Monat** (Free Tier) |
-
-### Deployment
+| `azurerm_static_web_app` | Hosting (Free Tier) | $0/Monat |
+| `azurerm_virtual_network` | Netzwerkisolierung | $0/Monat |
+| `azurerm_subnet` | Subnetz | $0/Monat |
+| `azurerm_key_vault` | Secrets | $0/Monat |
 
 ```bash
 cd infra-sec-app
-terraform init
-terraform plan
-terraform apply
+terraform init && terraform apply
 ```
 
 ---
 
 ## CI/CD Pipeline
 
-Die GitHub Actions Pipeline automatisiert den gesamten Build- und Deployment-Prozess:
-
 ```
-git push → GitHub Actions → npm ci → npm run build → Deploy to Azure SWA
+git push → GitHub Actions → npm ci → build → Deploy to Azure
 ```
 
-**Features:**
 - Automatisches Build & Deploy bei Push auf `master`
-- Node.js 20 mit npm-Caching für schnelle Builds
-- Environment Variables über GitHub Repository Settings
-- Staging-Environments für Pull Requests (automatisch erstellt & bereinigt)
+- Node.js 20 mit npm-Caching
+- Staging-Environments für Pull Requests
 
 ---
 
 ## Lokale Entwicklung
 
 ```bash
-# Repository klonen
-git clone https://github.com/<username>/m365-security-app.git
-cd m365-security-app
+git clone https://github.com/YouTay/m365-security-dashboard.git
+cd m365-security-dashboard
 
-# Dependencies installieren
 npm install
 
-# Environment-Variablen setzen (.env.local erstellen)
-NEXT_PUBLIC_AZURE_CLIENT_ID=<deine-app-client-id>
-NEXT_PUBLIC_AZURE_TENANT_ID=<deine-tenant-id>
+# .env.local erstellen
+NEXT_PUBLIC_AZURE_CLIENT_ID=<client-id>
+NEXT_PUBLIC_AZURE_TENANT_ID=<tenant-id>
 
-# Entwicklungsserver starten
-npm run dev          # → http://localhost:3000
-
-# Production Build (Static Export)
-npm run build        # → Ausgabe in /out
+npm run dev          # http://localhost:3000
+npm run build        # Static Export → /out
 ```
 
-### Azure App Registration einrichten
-
-Für die Verbindung zu einem echten M365 Tenant wird eine App Registration in Azure AD benötigt:
+### Azure App Registration
 
 1. **Azure Portal** → App Registrations → New Registration
-2. **Redirect URIs**: `http://localhost:3000` (SPA) + `https://<swa-url>` (Web)
-3. **API Permissions** (Delegated): Alle oben genannten Scopes hinzufügen
+2. **Redirect URIs**: `http://localhost:3000` (SPA) + Produktions-URL (Web)
+3. **API Permissions** (Delegated): Alle oben genannten Scopes
 4. **Admin Consent** erteilen
 
 ---
@@ -242,39 +303,22 @@ Für die Verbindung zu einem echten M365 Tenant wird eine App Registration in Az
 ```
 m365-security-app/
 ├── .github/workflows/
-│   └── deploy.yml              # CI/CD: GitHub Actions → Azure SWA
+│   └── deploy.yml              # CI/CD Pipeline
 ├── infra-sec-app/
-│   ├── main.tf                 # Terraform: Azure Infrastruktur
-│   ├── variables.tf            # Terraform: Variablen
-│   └── outputs.tf              # Terraform: Outputs
+│   ├── main.tf                 # Terraform IaC
+│   ├── variables.tf
+│   └── outputs.tf
 ├── src/
-│   ├── app/
-│   │   ├── dashboard/
-│   │   │   ├── alerts/         # Security Alerts
-│   │   │   ├── audit-logs/     # Verzeichnis-Audit-Logs
-│   │   │   ├── conditional-access/  # CA Policies
-│   │   │   ├── devices/        # Intune Geräte
-│   │   │   ├── gdpr-checklist/ # DSGVO Compliance
-│   │   │   ├── mfa-status/     # MFA-Registrierungsstatus
-│   │   │   ├── risky-users/    # Identity Protection
-│   │   │   ├── users/          # Benutzer & Rollen
-│   │   │   └── page.tsx        # Dashboard Overview
-│   │   ├── layout.tsx          # Root Layout (MSAL Provider)
-│   │   └── page.tsx            # Landing Page
-│   ├── components/
-│   │   ├── dashboard/          # Dashboard-spezifische Komponenten
-│   │   └── shared/             # Wiederverwendbare UI-Komponenten
-│   ├── hooks/
-│   │   └── useGraphData.ts     # Generic Graph API Data Hook
+│   ├── app/dashboard/          # Alle Dashboard-Seiten
+│   ├── components/             # UI-Komponenten
+│   ├── hooks/                  # React Hooks (useGraphData, useUsers, etc.)
 │   ├── lib/
 │   │   ├── graph/              # Microsoft Graph API Fetcher
-│   │   ├── msal/               # MSAL Konfiguration & Scopes
-│   │   ├── mock/               # Demo-Daten (nur ohne Login)
+│   │   ├── msal/               # Auth-Konfiguration
+│   │   ├── mock/               # Demo-Daten
 │   │   └── recommendations.ts  # KI-Empfehlungs-Engine
 │   └── types/                  # TypeScript Interfaces
-├── package.json
-├── next.config.ts
-└── tsconfig.json
+└── docs/screenshots/           # App-Screenshots
 ```
 
 ---
@@ -283,19 +327,13 @@ m365-security-app/
 
 | Bereich | Technologien |
 |---|---|
-| **Cloud & Azure** | Microsoft 365, Azure AD (Entra ID), Azure Static Web Apps, Azure Key Vault, Virtual Networks, RBAC |
-| **Identity & Security** | Entra ID, Conditional Access, MFA, Identity Protection, Privileged Identity Management, Secure Score, DSGVO |
-| **KI-Integration** | AI-basierte Security-Analyse, Automatisierte Risikobewertung, Priorisierte Handlungsempfehlungen |
-| **Infrastructure as Code** | Terraform (Azure Provider), Reproduzierbare Environments, State Management |
-| **DevOps & CI/CD** | GitHub Actions, Automatisiertes Build & Deploy, Staging Environments |
-| **Fullstack Development** | Next.js 16, TypeScript, React 19, Fluent UI v9, Microsoft Graph API, MSAL.js, OAuth 2.0 / OIDC |
-| **API-Integration** | Microsoft Graph API (15+ Endpoints), REST APIs, Delegated Permissions, Token Management |
-
----
-
-## Lizenz
-
-Dieses Projekt wurde als Portfolio-Projekt entwickelt und dient der Demonstration von Microsoft 365 Security, Cloud-Infrastruktur und KI-Integration Fähigkeiten.
+| **Cloud & Azure** | Microsoft 365, Entra ID (Azure AD), Static Web Apps, Key Vault, VNet, RBAC |
+| **Identity & Security** | Conditional Access, MFA, Identity Protection, Secure Score, DSGVO |
+| **KI-Integration** | AI Security-Analyse, automatisierte Risikobewertung, priorisierte Empfehlungen mit Direktlinks |
+| **Infrastructure as Code** | Terraform (Azure Provider), reproduzierbare Environments |
+| **DevOps & CI/CD** | GitHub Actions, automatisiertes Build & Deploy |
+| **Fullstack Development** | Next.js 16, TypeScript, React 19, Fluent UI v9, MSAL.js, OAuth 2.0 |
+| **API-Integration** | Microsoft Graph API (15+ Endpoints), Delegated Permissions, Token Management |
 
 ---
 
