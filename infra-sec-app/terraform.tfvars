@@ -1,0 +1,6 @@
+subscription_id = "f2361f1c-4e00-4837-b196-50dac618f7bc"
+msal_client_id  = "dc718601-3905-4d30-a7e5-fc19792e657b"
+prefix          = "m365sec"
+location        = "westeurope"
+swa_location    = "westeurope"
+deployer_ip     = "84.115.227.152"

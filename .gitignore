@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Terraform
+infra-sec-app/.terraform/
+infra-sec-app/*.tfstate
+infra-sec-app/*.tfstate.backup
+infra-sec-app/.terraform.lock.hcl

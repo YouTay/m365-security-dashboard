@@ -1,0 +1,75 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [
+      "/_next/*",
+      "/images/*",
+      "/*.ico",
+      "/*.svg",
+      "/*.png",
+      "/*.js",
+      "/*.css",
+      "/*.json",
+      "/*.txt",
+      "/dashboard/*.html",
+      "/dashboard.html"
+    ]
+  },
+  "routes": [
+    {
+      "route": "/dashboard",
+      "rewrite": "/dashboard.html"
+    },
+    {
+      "route": "/dashboard/alerts",
+      "rewrite": "/dashboard/alerts.html"
+    },
+    {
+      "route": "/dashboard/users",
+      "rewrite": "/dashboard/users.html"
+    },
+    {
+      "route": "/dashboard/mfa-status",
+      "rewrite": "/dashboard/mfa-status.html"
+    },
+    {
+      "route": "/dashboard/risky-users",
+      "rewrite": "/dashboard/risky-users.html"
+    },
+    {
+      "route": "/dashboard/conditional-access",
+      "rewrite": "/dashboard/conditional-access.html"
+    },
+    {
+      "route": "/dashboard/devices",
+      "rewrite": "/dashboard/devices.html"
+    },
+    {
+      "route": "/dashboard/app-permissions",
+      "rewrite": "/dashboard/app-permissions.html"
+    },
+    {
+      "route": "/dashboard/gdpr-checklist",
+      "rewrite": "/dashboard/gdpr-checklist.html"
+    },
+    {
+      "route": "/dashboard/audit-logs",
+      "rewrite": "/dashboard/audit-logs.html"
+    },
+    {
+      "route": "/dashboard/report-export",
+      "rewrite": "/dashboard/report-export.html"
+    }
+  ],
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+  },
+  "mimeTypes": {
+    ".json": "application/json",
+    ".js": "application/javascript",
+    ".css": "text/css"
+  }
+}
